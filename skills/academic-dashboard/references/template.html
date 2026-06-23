@@ -1,0 +1,264 @@
+<!--
+  ACADEMIC DASHBOARD — CANONICAL TEMPLATE
+  Copy these tokens, components, and structure directly. Do not reconstruct from memory.
+  This is a LIGHT, journal/preprint aesthetic. It is deliberately NOT the Scite dark brand.
+  The whole point is that it reads as a neutral research artifact, not marketing collateral.
+
+  Self-contained single HTML file. No build step, no external JS framework.
+  Charts: Chart.js from CDN only when a chart is genuinely needed.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>[Dashboard Title]</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- Source Serif 4 for display/headings, Inter for UI/body, IBM Plex Mono for data/labels -->
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<!-- Only include if the dashboard has a chart: -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script> -->
+<style>
+:root {
+  /* ---- PAPER / SURFACE (light, warm-neutral — like a printed page, not a SaaS app) ---- */
+  --paper:        #FBFAF7;   /* page background, faint warm off-white */
+  --surface:      #FFFFFF;   /* cards, tables */
+  --surface-sunk: #F4F2EC;   /* table header rows, insets */
+  --rule:         #E5E2DB;   /* hairline borders — the journal "rule" */
+  --rule-strong:  #CFC9BD;   /* heavier dividers */
+
+  /* ---- INK (text) ---- */
+  --ink:          #1A1814;   /* near-black, warm */
+  --ink-body:     #38342D;   /* body copy */
+  --ink-soft:     #6B665C;   /* secondary / captions */
+  --ink-faint:    #95907F;   /* metadata, source lines */
+
+  /* ---- SMART CITATIONS ENCODING — LOCKED. Use these everywhere, every dashboard. ----
+     Never recolor these. Consistency across dashboards IS the product story.
+     Muted, print-safe, colorblind-survivable (green/clay/gray differ in luminance, not just hue). */
+  --supporting:      #2E7D5B;   /* muted forest green */
+  --supporting-soft: #E4EFE8;   /* fill / chip background */
+  --contrasting:     #B0472B;   /* muted clay red — NOT a fire-engine alert red */
+  --contrasting-soft:#F4E4DD;
+  --mentioning:      #7A756A;   /* neutral warm gray */
+  --mentioning-soft: #ECE9E2;
+
+  /* ---- ACCENT (used sparingly — a single restrained editorial accent, NOT Scite blue) ---- */
+  --accent:       #3A5A8C;   /* slate blue, low-saturation; for links, focus, one chart series */
+
+  --font-display: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --font-ui:      "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono:    "IBM Plex Mono", "SF Mono", Menlo, Consolas, monospace;
+
+  --maxw: 920px;            /* single-column reading measure — journal width, not full-bleed */
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--paper);
+  color: var(--ink-body);
+  font-family: var(--font-ui);
+  font-size: 15px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.wrap { max-width: var(--maxw); margin: 0 auto; padding: 56px 32px 96px; }
+
+/* ---- MASTHEAD: title block like the head of a paper ---- */
+.masthead { border-bottom: 2px solid var(--ink); padding-bottom: 20px; margin-bottom: 8px; }
+.eyebrow {
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--ink-faint); margin: 0 0 14px;
+}
+h1.title {
+  font-family: var(--font-display); font-weight: 600; color: var(--ink);
+  font-size: clamp(28px, 4vw, 40px); line-height: 1.12; letter-spacing: -0.01em; margin: 0;
+}
+.subtitle {
+  font-family: var(--font-display); font-weight: 400; color: var(--ink-soft);
+  font-size: clamp(16px, 2vw, 20px); line-height: 1.4; margin: 12px 0 0; max-width: 60ch;
+}
+.byline {
+  font-family: var(--font-mono); font-size: 12px; color: var(--ink-faint);
+  margin-top: 18px; display: flex; flex-wrap: wrap; gap: 6px 18px;
+}
+.byline .q { color: var(--ink-body); }   /* the actual query/finding being analyzed */
+
+/* ---- SECTION ---- */
+section { margin-top: 48px; }
+h2.section-head {
+  font-family: var(--font-display); font-weight: 600; color: var(--ink);
+  font-size: 22px; letter-spacing: -0.01em; margin: 0 0 4px;
+  padding-bottom: 8px; border-bottom: 1px solid var(--rule-strong);
+}
+.section-note { font-size: 13px; color: var(--ink-soft); margin: 8px 0 24px; max-width: 64ch; }
+
+/* ---- KEY FIGURES (restrained stat row — NOT big SaaS metric tiles) ---- */
+.figures { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0; border: 1px solid var(--rule); border-radius: 6px; overflow: hidden; }
+.figure { padding: 18px 20px; border-right: 1px solid var(--rule); background: var(--surface); }
+.figure:last-child { border-right: none; }
+.fig-val { font-family: var(--font-mono); font-size: 30px; font-weight: 500; color: var(--ink); line-height: 1; }
+.fig-val.supporting  { color: var(--supporting); }
+.fig-val.contrasting { color: var(--contrasting); }
+.fig-val.mentioning  { color: var(--mentioning); }
+.fig-label { font-size: 12px; color: var(--ink-soft); margin-top: 8px; letter-spacing: 0.01em; }
+
+/* ---- SMART CITATIONS LEGEND — include once, near the top of any citation view ---- */
+.sc-legend { display: flex; flex-wrap: wrap; gap: 8px 18px; margin: 0 0 20px; font-family: var(--font-mono); font-size: 12px; }
+.sc-key { display: inline-flex; align-items: center; gap: 7px; color: var(--ink-soft); }
+.sc-dot { width: 11px; height: 11px; border-radius: 2px; display: inline-block; }
+.sc-dot.supporting  { background: var(--supporting); }
+.sc-dot.contrasting { background: var(--contrasting); }
+.sc-dot.mentioning  { background: var(--mentioning); }
+
+/* ---- CLASSIFICATION CHIP (inline tag for a single citation's type) ---- */
+.chip { display: inline-block; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.04em;
+        padding: 2px 8px; border-radius: 3px; white-space: nowrap; }
+.chip.supporting  { background: var(--supporting-soft);  color: var(--supporting); }
+.chip.contrasting { background: var(--contrasting-soft); color: var(--contrasting); }
+.chip.mentioning  { background: var(--mentioning-soft);  color: var(--mentioning); }
+
+/* ---- DATA TABLE (the workhorse — clean ruled rows, no zebra-stripe SaaS look) ---- */
+table.data { width: 100%; border-collapse: collapse; font-size: 14px; }
+table.data thead th {
+  text-align: left; font-family: var(--font-mono); font-weight: 500; font-size: 11px;
+  letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-soft);
+  background: var(--surface-sunk); padding: 10px 12px; border-bottom: 1px solid var(--rule-strong);
+}
+table.data tbody td { padding: 12px; border-bottom: 1px solid var(--rule); vertical-align: top; color: var(--ink-body); }
+table.data tbody tr:last-child td { border-bottom: none; }
+table.data .cite-title { color: var(--ink); font-weight: 500; }
+table.data .cite-meta { color: var(--ink-faint); font-family: var(--font-mono); font-size: 12px; }
+table.data td.num { font-family: var(--font-mono); text-align: right; white-space: nowrap; }
+
+/* ---- CHART FRAME ---- */
+.chart-frame { border: 1px solid var(--rule); border-radius: 6px; background: var(--surface); padding: 20px 22px; }
+.chart-cap { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-soft); margin: 0 0 14px; }
+.chart-wrap { position: relative; height: 320px; }
+
+/* ---- LINKS ---- */
+a { color: var(--accent); text-decoration: none; border-bottom: 1px solid color-mix(in srgb, var(--accent) 35%, transparent); }
+a:hover { border-bottom-color: var(--accent); }
+
+/* ---- SOURCE / FOOTER (provenance line — every dashboard ends with one) ---- */
+.colophon { margin-top: 64px; padding-top: 16px; border-top: 1px solid var(--rule); }
+.colophon p { font-family: var(--font-mono); font-size: 11px; color: var(--ink-faint); line-height: 1.7; margin: 0; }
+
+@media (max-width: 600px) {
+  .wrap { padding: 36px 20px 64px; }
+  .figure { border-right: none; border-bottom: 1px solid var(--rule); }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ============ MASTHEAD ============ -->
+  <header class="masthead">
+    <p class="eyebrow">Scite · Smart Citations</p>
+    <h1 class="title">[Dashboard title — describe the analysis, not the tool]</h1>
+    <p class="subtitle">[One-line framing of what this view answers.]</p>
+    <div class="byline">
+      <span class="q">Query: [the finding / paper / condition analyzed]</span>
+      <span>Generated [date]</span>
+      <span>n = [total citations / records]</span>
+    </div>
+  </header>
+
+  <!-- ============ KEY FIGURES ============ -->
+  <section>
+    <div class="figures">
+      <div class="figure"><div class="fig-val">[N]</div><div class="fig-label">Total citing statements</div></div>
+      <div class="figure"><div class="fig-val supporting">[N]</div><div class="fig-label">Supporting</div></div>
+      <div class="figure"><div class="fig-val contrasting">[N]</div><div class="fig-label">Contrasting</div></div>
+      <div class="figure"><div class="fig-val mentioning">[N]</div><div class="fig-label">Mentioning</div></div>
+    </div>
+  </section>
+
+  <!-- ============ A CHART SECTION (e.g. supporting vs contrasting over time) ============ -->
+  <section>
+    <h2 class="section-head">[Section heading — e.g. Support and contrast over time]</h2>
+    <p class="section-note">[One sentence on how to read it. Keep it plain.]</p>
+    <div class="sc-legend">
+      <span class="sc-key"><span class="sc-dot supporting"></span>Supporting</span>
+      <span class="sc-key"><span class="sc-dot contrasting"></span>Contrasting</span>
+      <span class="sc-key"><span class="sc-dot mentioning"></span>Mentioning</span>
+    </div>
+    <div class="chart-frame">
+      <p class="chart-cap">Citing statements per year, by type</p>
+      <div class="chart-wrap"><canvas id="scChart"></canvas></div>
+    </div>
+  </section>
+
+  <!-- ============ A TABLE SECTION (e.g. the citing papers themselves) ============ -->
+  <section>
+    <h2 class="section-head">[Section heading — e.g. Contrasting citations, most recent first]</h2>
+    <p class="section-note">[Why these rows, what order.]</p>
+    <table class="data">
+      <thead>
+        <tr><th>Citing work</th><th>Year</th><th>Classification</th><th class="num">Times cited</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="cite-title">[Citing paper title]</span><br><span class="cite-meta">[Authors · Journal]</span></td>
+          <td class="num">[YYYY]</td>
+          <td><span class="chip contrasting">contrasting</span></td>
+          <td class="num">[N]</td>
+        </tr>
+        <!-- repeat rows -->
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ============ COLOPHON / PROVENANCE — always end with this ============ -->
+  <footer class="colophon">
+    <p>Source: Scite Smart Citations via Scite MCP · [dataset, e.g. 280M+ citation statements] · Retrieved [date].<br>
+       Classifications (supporting / contrasting / mentioning) are assigned by Scite's citation analysis. Built with Claude Code.</p>
+  </footer>
+
+</div>
+
+<!-- ============ CHART.JS CONFIG (only if a chart is present) ============
+     Defaults that keep charts in the journal aesthetic:
+     - Stacked bars, NOT a glossy gradient area chart
+     - Series colors come from the LOCKED Smart Citations tokens
+     - Muted gridlines, mono tick font, no chartjunk
+-->
+<script>
+/* Guard so the file still renders if Chart.js wasn't loaded. */
+if (window.Chart) {
+  const ink = '#38342D', faint = '#95907F', rule = '#E5E2DB';
+  Chart.defaults.font.family = "'IBM Plex Mono', monospace";
+  Chart.defaults.font.size = 11;
+  Chart.defaults.color = faint;
+
+  new Chart(document.getElementById('scChart'), {
+    type: 'bar',
+    data: {
+      labels: ['2019','2020','2021','2022','2023','2024'],   // replace with real years
+      datasets: [
+        { label: 'Supporting',  data: [4,7,9,12,15,11], backgroundColor: '#2E7D5B' },
+        { label: 'Mentioning',  data: [8,11,14,19,22,18], backgroundColor: '#7A756A' },
+        { label: 'Contrasting', data: [1,2,3,5,8,9],     backgroundColor: '#B0472B' }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      scales: {
+        x: { stacked: true, grid: { display: false }, ticks: { color: faint } },
+        y: { stacked: true, grid: { color: rule }, border: { display: false }, ticks: { color: faint } }
+      },
+      plugins: {
+        legend: { display: false },   // we use the .sc-legend above instead
+        tooltip: { backgroundColor: '#1A1814', titleFont: { family: "'IBM Plex Mono', monospace" }, bodyFont: { family: "'IBM Plex Mono', monospace" } }
+      }
+    }
+  });
+}
+</script>
+</body>
+</html>
