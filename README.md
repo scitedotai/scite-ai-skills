@@ -21,6 +21,7 @@ Learn more in Anthropic's [Agent Skills documentation](https://docs.claude.com/e
 | Skill | What it does |
 |---|---|
 | [`academic-dashboard`](skills/academic-dashboard) | Renders research dashboards and data views in a clean, journal/preprint visual language, with a locked color encoding for Scite Smart Citations (supporting / contrasting / mentioning). Use it whenever building an HTML dashboard or report from Scite / research literature data. |
+| [`prompt-cost`](skills/prompt-cost) | Renders token usage and dollar cost of a prompt from Claude Code sessions as a self-contained HTML report. Use it when the user asks to show the cost of a prompt, token usage, or pricing breakdown for live demos and cost reviews. |
 
 ## How to install a Skill
 
@@ -65,7 +66,11 @@ After copying, restart Claude Code (or start a new conversation) and the Skill w
 scite-ai-skills/
 ├── README.md
 └── skills/
-    └── academic-dashboard/
+    ├── academic-dashboard/
+    │   ├── SKILL.md            # frontmatter + instructions
+    │   └── references/
+    │       └── template.html   # supporting resource
+    └── prompt-cost/
         ├── SKILL.md            # frontmatter + instructions
         └── references/
             └── template.html   # supporting resource
