@@ -22,6 +22,7 @@ Learn more in Anthropic's [Agent Skills documentation](https://docs.claude.com/e
 |---|---|
 | [`academic-dashboard`](skills/academic-dashboard) | Renders research dashboards and data views in a clean, journal/preprint visual language, with a locked color encoding for Scite Smart Citations (supporting / contrasting / mentioning). Use it whenever building an HTML dashboard or report from Scite / research literature data. |
 | [`prompt-cost`](skills/prompt-cost) | Renders token usage and dollar cost of a prompt from Claude Code sessions as a self-contained HTML report. Use it when the user asks to show the cost of a prompt, token usage, or pricing breakdown for live demos and cost reviews. |
+| [`scite-grounded-research`](skills/scite-grounded-research) | Grounds literature answers in the Scite MCP instead of model memory: searches first, reads supporting / contrasting tallies, flags retractions and corrections, and verifies user-supplied DOIs. Use it for any "what does the evidence say", find-papers, claim-check, or reference-verification request. Requires the Scite MCP server to be connected. |
 
 ## How to install a Skill
 
@@ -70,10 +71,12 @@ scite-ai-skills/
     │   ├── SKILL.md            # frontmatter + instructions
     │   └── references/
     │       └── template.html   # supporting resource
-    └── prompt-cost/
-        ├── SKILL.md            # frontmatter + instructions
-        └── references/
-            └── template.html   # supporting resource
+    ├── prompt-cost/
+    │   ├── SKILL.md            # frontmatter + instructions
+    │   └── references/
+    │       └── template.html   # supporting resource
+    └── scite-grounded-research/
+        └── SKILL.md            # frontmatter + instructions (no extra resources)
 ```
 
 ## Contributing a Skill
